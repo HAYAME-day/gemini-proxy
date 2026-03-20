@@ -36,6 +36,7 @@ async function geminiRequest(path, method, apiKey, body) {
 }
 
 const server = http.createServer(async (req, res) => {
+  console.log('Incoming request:', req.method, req.url);
   const apiKey = getApiKey(req);
 
   // 模型列表
@@ -88,6 +89,7 @@ if (systemPrompt && contents.length > 0) {
         // 简化处理：非流式返回
         const parsed = JSON.parse(result.body);
         console.log('Gemini response:', result.body);
+        console.log('Gemini non-stream response:', result.body);
         const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text || '';
         const response = {
           id: 'chatcmpl-1',
