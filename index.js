@@ -83,13 +83,12 @@ if (systemPrompt && contents.length > 0) {
 
       if (stream) {
         const result = await geminiRequest(
-          `/v1beta/models/${modelId}:streamGenerateContent`,
+          `/v1beta/models/${modelId}:generateContent`,
           'POST', apiKey, geminiBody
         );
-        // 简化处理：非流式返回
+        console.log('Gemini stream-forced response status:', result.status);
+        console.log('Gemini stream-forced response body:', result.body);
         const parsed = JSON.parse(result.body);
-        console.log('Gemini response:', result.body);
-        console.log('Gemini non-stream response:', result.body);
         const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text || '';
         const response = {
           id: 'chatcmpl-1',
@@ -100,7 +99,7 @@ if (systemPrompt && contents.length > 0) {
         };
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(response));
-      } else {
+      }else {
         const result = await geminiRequest(
           `/v1beta/models/${modelId}:generateContent`,
           'POST', apiKey, geminiBody
