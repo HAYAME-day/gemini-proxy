@@ -104,6 +104,8 @@ if (systemPrompt && contents.length > 0) {
           `/v1beta/models/${modelId}:generateContent`,
           'POST', apiKey, geminiBody
         );
+        console.log('Gemini else response status:', result.status);
+        console.log('Gemini else response body:', result.body);
         const parsed = JSON.parse(result.body);
         const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text || '';
         const response = {
