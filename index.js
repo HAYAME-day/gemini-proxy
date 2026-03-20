@@ -64,10 +64,19 @@ const server = http.createServer(async (req, res) => {
       const modelId = input.model || 'gemini-2.0-flash';
       const stream = input.stream || false;
 
-      const contents = input.messages.map(m => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }],
-      }));
+      const systemMessages = input.messages.filter(m => m.role === 'system');
+const nonSystemMessages = input.messages.filter(m => m.role !== 'system');
+
+const systemPrompt = systemMessages.map(m => m.content).join('\n');
+
+const contents = nonSystemMessages.map(m => ({
+  role: m.role === 'assistant' ? 'model' : 'user',
+  parts: [{ text: m.content }],
+}));
+
+if (systemPrompt && contents.length > 0) {
+  contents[0].parts[0].text = systemPrompt + '\n\n' + contents[0].parts[0].text;
+}
 
       const geminiBody = { contents };
 
