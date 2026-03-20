@@ -87,6 +87,7 @@ if (systemPrompt && contents.length > 0) {
         );
         // 简化处理：非流式返回
         const parsed = JSON.parse(result.body);
+        console.log('Gemini response:', result.body);
         const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text || '';
         const response = {
           id: 'chatcmpl-1',
